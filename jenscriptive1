@@ -1,0 +1,30 @@
+node {
+    def remote = [:]
+    remote.name = 'remote-host'
+    remote.host = '13.233.3.175'
+    remote.user = 'ubuntu'
+    remote.allowAnyHosts = true
+
+        stage('GIT checkout') {
+            checkout scm : [$class: 'GITSCM', branches : [[name: */scm]], userRemoteConfig: [[url: git 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git']]]
+        }
+
+        // Stage: Build
+        stage('build') {
+            sh 'mvn clean package'
+            sh "mv target/*.war target/boxfuse-sample-java-war-hello.war"
+        }
+
+        // Stage: Deploy
+        stage('deploy') {
+            sshagent(['TOMCAT']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no  target/boxfuse-sample-java-war-hello.war ubuntu@13.233.3.175:/home/ubuntu/tomcat/apache-tomcat-9.0.90/webapps
+                            
+                      ssh ubuntu@13.233.3.175 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/shutdown.sh
+                       ssh ubuntu@13.233.3.175 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/startup.sh
+                   """
+            }
+        }
+    } 
+
