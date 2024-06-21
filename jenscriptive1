@@ -9,13 +9,13 @@ node {
             git 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git'
         }
 
-        // Stage: Build
+        
         stage('build') {
             sh 'mvn clean package'
             sh "mv target/*.war target/boxfuse-sample-java-war-hello.war"
         }
 
-        // Stage: Deploy
+        
         stage('deploy') {
             sshagent(['ssh-id-1']) {
                 sh """
