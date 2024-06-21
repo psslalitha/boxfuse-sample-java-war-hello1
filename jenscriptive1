@@ -17,7 +17,7 @@ node {
 
         // Stage: Deploy
         stage('deploy') {
-            sshagent(['TOMCAT']) {
+            sshagent(['ssh-id-1']) {
                 sh """
                     scp -o StrictHostKeyChecking=no  target/boxfuse-sample-java-war-hello.war ubuntu@13.233.3.175:/home/ubuntu/tomcat/apache-tomcat-9.0.90/webapps
                             
