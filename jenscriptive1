@@ -6,7 +6,7 @@ node {
     remote.allowAnyHosts = true
 
         stage('GIT checkout') {
-            git 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git'
+             git 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git'
         }
 
         
