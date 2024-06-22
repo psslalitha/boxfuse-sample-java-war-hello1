@@ -1,7 +1,7 @@
 node {
     def remote = [:]
     remote.name = 'remote-host'
-    remote.host = '3.110.169.107'
+    remote.host = '13.201.62.124'
     remote.user = 'ubuntu'
     remote.allowAnyHosts = true
 
@@ -17,12 +17,12 @@ node {
 
         
         stage('deploy') {
-            sshagent(['ssh-id-1']) {
+            sshagent(['ssh-id-11']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no  target/boxfuse-sample-java-war-hello.war ubuntu@3.110.169.107:/home/ubuntu/tomcat/apache-tomcat-9.0.90/webapps
+                    scp -o StrictHostKeyChecking=no  target/boxfuse-sample-java-war-hello.war ubuntu@13.201.62.124:/home/ubuntu/tomcat/apache-tomcat-9.0.90/webapps
                             
-                      ssh ubuntu@3.110.169.107 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/shutdown.sh
-                       ssh ubuntu@3.110.169.107 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/startup.sh
+                      ssh ubuntu@13.201.62.124 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/shutdown.sh
+                       ssh ubuntu@13.201.62.124 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/startup.sh
                    """
             }
         }
