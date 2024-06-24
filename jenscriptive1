@@ -1,30 +1,26 @@
 node {
     def remote = [:]
     remote.name = 'remote-host'
-    remote.host = '13.201.62.124'
+    remote.host = '13.233.233.254'
     remote.user = 'ubuntu'
     remote.allowAnyHosts = true
 
-        stage('GIT checkout') {
-             git 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git'
-        }
+    stage('GIT checkout') {
+        checkout scm: [$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git']]]
+    }
 
-        
-        stage('build') {
-            sh 'mvn clean package'
-            sh "mv target/*.war target/boxfuse-sample-java-war-hello.war"
-        }
+    stage('Build') {
+        sh 'mvn clean package'
+        sh 'mv target/*.war target/boxfuse-sample-java-war-hello.war'
+    }
 
-        
-        stage('deploy') {
-            sshagent(['ssh-id-11']) {
-                sh """
-                    scp -o StrictHostKeyChecking=no  target/boxfuse-sample-java-war-hello.war ubuntu@13.201.62.124:/home/ubuntu/tomcat/apache-tomcat-9.0.90/webapps
-                            
-                      ssh ubuntu@13.201.62.124 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/shutdown.sh
-                       ssh ubuntu@13.201.62.124 /home/ubuntu/tomcat/apache-tomcat-9.0.90/bin/startup.sh
-                   """
-            }
+    stage('Deploy') {
+        sshagent(['ssh-id-s1']) {
+            sh 'scp -o StrictHostKeyChecking=no target/boxfuse-sample-java-war-hello.war ubuntu@13.233.233.254:/home/ubuntu/apache-tomcat-9.0.90/webapps/'
+            
+            sh 'ssh ubuntu@13.233.233.254 /home/ubuntu/apache-tomcat-9.0.90/bin/shutdown.sh'
+            sh 'ssh ubuntu@13.233.233.254 /home/ubuntu/apache-tomcat-9.0.90/bin/startup.sh'
         }
-    } 
-
+    }
+}
+            
